@@ -12,3 +12,15 @@ const ArticleTagModel = sequelize.define("Article_Tag", {
 });
 
 export default ArticleTagModel;
+
+ArticleModel.belongsToMany(TagModel, {
+  through: ArticleTagModel,
+  foreignKey: "article_id",
+  as: "tags",
+});
+
+TagModel.belongsToMany(ArticleModel, {
+  through: ArticleTagModel,
+  foreignKey: "tag_id",
+  as: "articles",
+});

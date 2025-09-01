@@ -17,3 +17,8 @@ const ProfileModel = sequelize.define("Profile", {
 });
 
 export default ProfileModel;
+
+//Relaciones
+ProfileModel.belongsTo(UserModel, { foreignKey: "user_id", as: "user" });
+
+UserModel.hasOne(ProfileModel, { foreignKey: "user_id", as: "profile" });
