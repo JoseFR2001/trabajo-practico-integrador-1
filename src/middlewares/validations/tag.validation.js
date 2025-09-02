@@ -1,3 +1,80 @@
 import { body, param } from "express-validator";
+import TagModel from "../../models/tag.model";
 
 // name: 2-30 caracteres, único, obligatorio, sin espacios.
+
+export const createUserValidation = [
+  body("name")
+    .trim()
+    .notEmpty()
+    .withMessage("El name es obligatorio")
+    .isLength({ min: 2, max: 30 })
+    .withMessage("El name debe tener al menos 2 caracteres y un maximo de 30")
+    .custom(async (name) => {
+      const nameMinuscula = name.toLowerCase();
+      const nameExiste = await TagModel.findOne({
+        where: { name: nameMinuscula },
+      });
+      if (nameExiste) throw new Error("El name ya existe");
+      return true;
+    }),
+];
+
+export const getTagByPkValidation = [
+  param("id")
+    .isInt()
+    .withMessage("El id debe ser un número entero")
+    .custom(async (id) => {
+      if (Number(id) < 1) throw new Error("El id debe ser positivo");
+      return true;
+    })
+    .custom(async (id) => {
+      const user = await TagModel.findByPk(id);
+      if (!user) throw new Error("El Tag no existe");
+      return true;
+    }),
+];
+
+export const updateTagValidation = [
+  param("id")
+    .isInt()
+    .withMessage("El id debe ser un número entero")
+    .custom(async (id) => {
+      if (Number(id) < 1) throw new Error("El id debe ser positivo");
+      return true;
+    })
+    .custom(async (id) => {
+      const user = await TagModel.findByPk(id);
+      if (!user) throw new Error("El Tag no existe");
+      return true;
+    }),
+  body("name")
+    .trim()
+    .notEmpty()
+    .withMessage("El name es obligatorio")
+    .isLength({ min: 2, max: 30 })
+    .withMessage("El name debe tener al menos 2 caracteres y un maximo de 30")
+    .custom(async (name) => {
+      const nameMinuscula = name.toLowerCase();
+      const nameExiste = await TagModel.findOne({
+        where: { name: nameMinuscula },
+      });
+      if (nameExiste) throw new Error("El name ya existe");
+      return true;
+    }),
+];
+
+export const deleteTagValidation = [
+  param("id")
+    .isInt()
+    .withMessage("El id debe ser un número entero")
+    .custom(async (id) => {
+      if (Number(id) < 1) throw new Error("El id debe ser positivo");
+      return true;
+    })
+    .custom(async (id) => {
+      const user = await TagModel.findByPk(id);
+      if (!user) throw new Error("El Tag no existe");
+      return true;
+    }),
+];
