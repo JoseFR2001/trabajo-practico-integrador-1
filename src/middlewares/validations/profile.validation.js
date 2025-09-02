@@ -10,7 +10,8 @@ export const createProfileValidation = [
     .matches(/^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/)
     .withMessage("El nombre solo puede contener letras y espacios")
     .isLength({ min: 2, max: 50 })
-    .withMessage("El nombre debe tener entre 2 y 50 caracteres"),
+    .withMessage("El nombre debe tener entre 2 y 50 caracteres")
+    .escape(),
   body("last_name")
     .trim()
     .notEmpty()
@@ -18,7 +19,8 @@ export const createProfileValidation = [
     .matches(/^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/)
     .withMessage("El apellido solo puede contener letras y espacios")
     .isLength({ min: 2, max: 50 })
-    .withMessage("El apellido debe tener entre 2 y 50 caracteres"),
+    .withMessage("El apellido debe tener entre 2 y 50 caracteres")
+    .escape(),
   body("biography")
     .optional()
     .notEmpty()
@@ -69,6 +71,18 @@ export const getProfileByPkValidation = [
 ];
 
 export const updateProfileValidation = [
+  param("id")
+    .isInt()
+    .withMessage("El id debe ser un número entero")
+    .custom(async (id) => {
+      if (Number(id) < 1) throw new Error("El id debe ser positivo");
+      return true;
+    })
+    .custom(async (id) => {
+      const user = await ProfileModel.findByPk(id);
+      if (!user) throw new Error("El Perfil no existe");
+      return true;
+    }),
   body("first_name")
     .optional()
     .trim()
@@ -77,7 +91,8 @@ export const updateProfileValidation = [
     .matches(/^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/)
     .withMessage("El nombre solo puede contener letras y espacios")
     .isLength({ min: 2, max: 50 })
-    .withMessage("El nombre debe tener entre 2 y 50 caracteres"),
+    .withMessage("El nombre debe tener entre 2 y 50 caracteres")
+    .escape(),
   body("last_name")
     .optional()
     .trim()
@@ -86,7 +101,8 @@ export const updateProfileValidation = [
     .matches(/^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/)
     .withMessage("El apellido solo puede contener letras y espacios")
     .isLength({ min: 2, max: 50 })
-    .withMessage("El apellido debe tener entre 2 y 50 caracteres"),
+    .withMessage("El apellido debe tener entre 2 y 50 caracteres")
+    .escape(),
   body("biography")
     .optional()
     .notEmpty()

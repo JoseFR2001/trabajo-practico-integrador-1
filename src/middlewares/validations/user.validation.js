@@ -75,7 +75,7 @@ export const getUserByPkValidation = [
     })
     .custom(async (id) => {
       const user = await UserModel.findByPk(id);
-      if (!user) throw new Error("El ususario no existe");
+      if (!user) throw new Error("El usuario no existe");
       return true;
     }),
 ];
@@ -90,7 +90,7 @@ export const updateUserValidation = [
     })
     .custom(async (id) => {
       const user = await UserModel.findByPk(id);
-      if (!user) throw new Error("El ususario no existe");
+      if (!user) throw new Error("El usuario no existe");
       return true;
     }),
   body("username")
@@ -110,7 +110,7 @@ export const updateUserValidation = [
         where: { username: usernameMinuscula },
       });
       if (user) {
-        throw new Error("El usurname ya existe");
+        throw new Error("El username ya existe");
       }
       return true;
     })

@@ -6,14 +6,40 @@ import {
   getByPkUser,
   updateUser,
 } from "../controllers/user.controller.js";
-import { createUserValidator } from "../middlewares/validations/user.validation.js";
+
+import {
+  createUserValidator,
+  deleteUserValidation,
+  getUserByPkValidation,
+  updateUserValidation,
+} from "../middlewares/validations/user.validation.js";
 import applyValidations from "../middlewares/validator.js";
 
 const userRouter = Router();
+
 userRouter.post("/users", createUserValidator, applyValidations, createUser);
+
 userRouter.get("/users", getAllUser);
-userRouter.get("/users/:id", getByPkUser);
-userRouter.put("/users/:id", updateUser);
-userRouter.delete("/users/:id", deleteUser);
+
+userRouter.get(
+  "/users/:id",
+  getUserByPkValidation,
+  applyValidations,
+  getByPkUser
+);
+
+userRouter.put(
+  "/users/:id",
+  updateUserValidation,
+  applyValidations,
+  updateUser
+);
+
+userRouter.delete(
+  "/users/:id",
+  deleteUserValidation,
+  applyValidations,
+  deleteUser
+);
 
 export default userRouter;

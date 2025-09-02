@@ -1,9 +1,7 @@
 import { body, param } from "express-validator";
-import TagModel from "../../models/tag.model";
+import TagModel from "../../models/tag.model.js";
 
-// name: 2-30 caracteres, único, obligatorio, sin espacios.
-
-export const createUserValidation = [
+export const createTagValidation = [
   body("name")
     .trim()
     .notEmpty()

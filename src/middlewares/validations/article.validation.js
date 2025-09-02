@@ -1,6 +1,6 @@
 import { body, param } from "express-validator";
 import UserModel from "../../models/user.model.js";
-import ArticleModel from "../../models/article.model";
+import ArticleModel from "../../models/article.model.js";
 
 export const createArticleValidation = [
   body("title")
@@ -10,7 +10,8 @@ export const createArticleValidation = [
     .isLength({ min: 2, max: 200 })
     .withMessage(
       "El titulo debe tener un minimo de 2 caracteres y un maximo de 200 caracteres"
-    ),
+    )
+    .escape(),
   body("content")
     .trim()
     .notEmpty()
@@ -22,7 +23,8 @@ export const createArticleValidation = [
     .notEmpty()
     .withMessage("Excerpt no puede ser vacio")
     .isLength({ max: 500 })
-    .withMessage("El excerpt no puede contener mas de 500 caracteres"),
+    .withMessage("El excerpt no puede contener mas de 500 caracteres")
+    .escape(),
   body("status")
     .customSanitizer(async (value) => {
       if (!value || value.trim() === "") return "published";
@@ -34,7 +36,7 @@ export const createArticleValidation = [
     .notEmpty()
     .withMessage("El user_id es obligatorio")
     .isInt()
-    .withMessage("El id debe ser un número entero")
+    .withMessage("El user_id debe ser un número entero")
     .custom(async (user_id) => {
       if (Number(user_id) < 1) throw new Error("El user_id debe ser positivo");
       return true;
@@ -49,19 +51,31 @@ export const createArticleValidation = [
 export const getArticleByPkValidation = [
   param("id")
     .isInt()
-    .withMessage("El id debe ser un número entero")
+    .withMessage("El user_id debe ser un número entero")
     .custom(async (id) => {
       if (Number(id) < 1) throw new Error("El id debe ser positivo");
       return true;
     })
     .custom(async (id) => {
       const article = await ArticleModel.findByPk(id);
-      if (!article) throw new Error("El usuArticle no existe");
+      if (!article) throw new Error("El Article no existe");
       return true;
     }),
 ];
 
 export const updateArticleValidation = [
+  param("id")
+    .isInt()
+    .withMessage("El user_id debe ser un número entero")
+    .custom(async (id) => {
+      if (Number(id) < 1) throw new Error("El id debe ser positivo");
+      return true;
+    })
+    .custom(async (id) => {
+      const article = await ArticleModel.findByPk(id);
+      if (!article) throw new Error("El Article no existe");
+      return true;
+    }),
   body("title")
     .optional()
     .trim()
@@ -70,7 +84,8 @@ export const updateArticleValidation = [
     .isLength({ min: 2, max: 200 })
     .withMessage(
       "El titulo debe tener un minimo de 2 caracteres y un maximo de 200 caracteres"
-    ),
+    )
+    .escape(),
   body("content")
     .optional()
     .trim()
@@ -83,7 +98,8 @@ export const updateArticleValidation = [
     .notEmpty()
     .withMessage("Excerpt no puede ser vacio")
     .isLength({ max: 500 })
-    .withMessage("El excerpt no puede contener mas de 500 caracteres"),
+    .withMessage("El excerpt no puede contener mas de 500 caracteres")
+    .escape(),
   body("status")
     .optional()
     .customSanitizer(async (value) => {
@@ -97,7 +113,7 @@ export const updateArticleValidation = [
     .notEmpty()
     .withMessage("El user_id es obligatorio")
     .isInt()
-    .withMessage("El id debe ser un número entero")
+    .withMessage("El user_id debe ser un número entero")
     .custom(async (user_id) => {
       if (Number(user_id) < 1) throw new Error("El user_id debe ser positivo");
       return true;
@@ -112,7 +128,7 @@ export const updateArticleValidation = [
 export const deleteArticleValidation = [
   param("id")
     .isInt()
-    .withMessage("El id debe ser un número entero")
+    .withMessage("El user_id debe ser un número entero")
     .custom(async (id) => {
       if (Number(id) < 1) throw new Error("El id debe ser positivo");
       return true;
