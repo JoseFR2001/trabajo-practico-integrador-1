@@ -55,6 +55,7 @@ export const createUserValidation = [
       "La contraseña debe tener al menos una minuscula, una mayuscula y un número"
     ),
   body("role")
+    .optional()
     .customSanitizer((value) => {
       //Uso customSanitizer para poder modificar el valor, con custom solo puedo verificar si se cumple la condición
       if (!value || value.trim() === "") return "user";
