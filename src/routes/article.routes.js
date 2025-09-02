@@ -9,10 +9,10 @@ import {
 
 const articleRouter = Router();
 
-articleRouter.post("/", createArticle);
-articleRouter.get("/", getAllArticles);
-articleRouter.get("/:id", getByPkArticle);
-articleRouter.put("/:id", updateArticle);
-articleRouter.delete("/:id", deleteArticle);
+articleRouter.post("/articles", createArticle);
+articleRouter.get("/articles", getAllArticles);
+articleRouter.get("/articles/:id", getByPkArticle);
+articleRouter.put("/articles/:id", updateArticle);
+articleRouter.delete("/articles/:id", deleteArticle);
 
 export default articleRouter;

@@ -9,10 +9,10 @@ import {
 
 const profileRouter = Router();
 
-profileRouter.post("/", createProfile);
-profileRouter.get("/", getAllProfiles);
-profileRouter.get("/:id", getByPkProfile);
-profileRouter.put("/:id", updateProfile);
-profileRouter.delete("/:id", deleteProfile);
+profileRouter.post("/profiles", createProfile);
+profileRouter.get("/profiles", getAllProfiles);
+profileRouter.get("/profiles/:id", getByPkProfile);
+profileRouter.put("/profiles/:id", updateProfile);
+profileRouter.delete("/profiles/:id", deleteProfile);
 
 export default profileRouter;
