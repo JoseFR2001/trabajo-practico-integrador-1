@@ -50,9 +50,9 @@ export const updateArticleTag = async (req, res) => {
 };
 
 export const deleteArticleTag = async (req, res) => {
-  const { id } = req.params;
+  const { articleTagId } = req.params;
   try {
-    const deleted = await ArticleTagModel.destroy({ where: { id } });
+    const deleted = await ArticleTagModel.destroy({ where: { articleTagId } });
     if (!deleted)
       return res.status(404).json({ message: "La relación no existe" });
     return res

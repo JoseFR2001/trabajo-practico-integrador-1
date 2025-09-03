@@ -1,4 +1,5 @@
 import ArticleModel from "../models/article.model.js";
+import UserModel from "../models/user.model.js";
 
 export const createArticle = async (req, res) => {
   try {
@@ -15,6 +16,22 @@ export const getAllArticles = async (req, res) => {
     if (articles.length === 0)
       return res.status(404).json({ message: "No existen artículos" });
     return res.status(200).json(articles);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export const getAllUserLogeado = async (req, res) => {
+  try {
+    const userLogeado = await UserModel.findByPk(req.user.id, {
+      attributes: ["username"],
+      include: {
+        model: ArticleModel,
+        as: "articles",
+      },
+    });
+
+    return res.status(200).json(userLogeado);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

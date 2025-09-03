@@ -34,13 +34,20 @@ export const getByPkTag = async (req, res) => {
 export const updateTag = async (req, res) => {
   const { id } = req.params;
   try {
-    const [updated] = await TagModel.update(req.body, { where: { id } });
-    if (updated === 0) {
-      return res.status(404).json({ message: "La etiqueta no existe" });
-    } else {
-      const tag = await TagModel.findByPk(id);
-      return res.status(200).json(tag);
+    const data = matchedData(req, { locations: ["body"] });
+
+    if (Object.keys(data).length === 0) {
+      return res
+        .status(404)
+        .json({ message: "La data tiene que ser correcta" });
     }
+
+    const tag = await TagModel.findByPk(id);
+    if (!tag) return res.status(404).json({ message: "El Tag no existe" });
+
+    await tag.update(data);
+
+    return res.status(200).json({ message: "usuario actualizado", tag });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

@@ -1,28 +1,27 @@
 import { Router } from "express";
 import {
-  createUser,
+  // createUser,
   deleteUser,
   getAllUser,
   getByPkUser,
   updateUser,
 } from "../controllers/user.controller.js";
-
 import {
-  // createUserValidator,
   deleteUserValidation,
   getUserByPkValidation,
   updateUserValidation,
 } from "../middlewares/validations/user.validation.js";
 import applyValidations from "../middlewares/validator.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { adminMiddleware } from "../middlewares/admin.middleware.js";
 
 const userRouter = Router();
-
-userRouter.post("/users", applyValidations, createUser);
-
-userRouter.get("/users", getAllUser);
+userRouter.get("/users", authMiddleware, adminMiddleware, getAllUser);
 
 userRouter.get(
   "/users/:id",
+  authMiddleware,
+  adminMiddleware,
   getUserByPkValidation,
   applyValidations,
   getByPkUser
@@ -30,13 +29,16 @@ userRouter.get(
 
 userRouter.put(
   "/users/:id",
+  authMiddleware,
+  adminMiddleware,
   updateUserValidation,
   applyValidations,
   updateUser
 );
-
 userRouter.delete(
   "/users/:id",
+  authMiddleware,
+  adminMiddleware,
   deleteUserValidation,
   applyValidations,
   deleteUser
