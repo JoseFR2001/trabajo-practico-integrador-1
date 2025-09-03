@@ -1,6 +1,44 @@
+import { matchedData } from "express-validator";
 import { generateToken } from "../helpers/jwt.helper.js";
 import ProfileModel from "../models/profile.model.js";
 import UserModel from "../models/user.model.js";
+
+export const register = async (req, res) => {
+  try {
+    const data = matchedData(req, { locations: ["body"] });
+    console.log(data);
+
+    if (Object.keys(data).length === 0) {
+      return res
+        .status(404)
+        .json({ message: "La data tiene que ser correcta" });
+    }
+
+    const user = await UserModel.create({
+      username: data.username,
+      email: data.email,
+      password: data.password,
+      role: data.role,
+    });
+
+    await ProfileModel.create({
+      user_id: user.id,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      biography: data.biography,
+      avatar_url: data.avatar_url,
+      birth_date: data.birth_date,
+    });
+
+    res.status(201).json({
+      msg: "usuario creado correctamente",
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Error interno del servidor",
+    });
+  }
+};
 
 export const login = async (req, res) => {
   const { username, password } = req.body;

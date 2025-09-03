@@ -8,7 +8,7 @@ import {
 } from "../controllers/user.controller.js";
 
 import {
-  createUserValidator,
+  // createUserValidator,
   deleteUserValidation,
   getUserByPkValidation,
   updateUserValidation,
@@ -17,7 +17,7 @@ import applyValidations from "../middlewares/validator.js";
 
 const userRouter = Router();
 
-userRouter.post("/users", createUserValidator, applyValidations, createUser);
+userRouter.post("/users", applyValidations, createUser);
 
 userRouter.get("/users", getAllUser);
 

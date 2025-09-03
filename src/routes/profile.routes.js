@@ -8,7 +8,7 @@ import {
 } from "../controllers/profile.controller.js";
 
 import {
-  createProfileValidation,
+  // createProfileValidation,
   deleteProfileValidation,
   getProfileByPkValidation,
   updateProfileValidation,
@@ -20,7 +20,7 @@ const profileRouter = Router();
 
 profileRouter.post(
   "/profiles",
-  createProfileValidation,
+  // createProfileValidation,
   applyValidations,
   createProfile
 );
