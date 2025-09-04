@@ -69,7 +69,7 @@ export const getArticleUserLoginById = async (req, res) => {
     const article = await ArticleModel.findOne({
       where: {
         id: id,
-        userId: req.user.id,
+        user_id: req.user.id,
       },
     });
 

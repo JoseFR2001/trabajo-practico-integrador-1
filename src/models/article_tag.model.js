@@ -26,3 +26,14 @@ TagModel.belongsToMany(ArticleModel, {
   as: "articles",
   onDelete: "CASCADE",
 });
+ArticleTag.belongsTo(Tag, {
+  foreignKey: "tag_id",
+  as: "tags",
+  onDelete: "CASCADE",
+});
+
+ArticleTag.belongsTo(Article, {
+  foreignKey: "article_id",
+  as: "articles",
+  onDelete: "CASCADE",
+});
