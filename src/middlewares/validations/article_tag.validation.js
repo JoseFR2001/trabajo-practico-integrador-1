@@ -47,12 +47,12 @@ export const deleteArticleTagValidation = [
   param("articleTagId")
     .isInt()
     .withMessage("El id debe ser un número entero")
-    .custom(async (id) => {
-      if (Number(id) < 1) throw new Error("El id debe ser positivo");
+    .custom(async (articleTagId) => {
+      if (Number(articleTagId) < 1) throw new Error("El id debe ser positivo");
       return true;
     })
-    .custom(async (id) => {
-      const articleTag = await ArticleTagModel.findByPk(id);
+    .custom(async (articleTagId) => {
+      const articleTag = await ArticleTagModel.findByPk(articleTagId);
       if (!articleTag) throw new Error("La relación no existe");
       return true;
     }),

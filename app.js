@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 import { initDB } from "./src/config/database.js";
 
@@ -16,8 +17,13 @@ const app = express();
 const PORT = process.env.PORT;
 
 app.use(express.json());
-3;
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 app.use("/api", userRouter);
 app.use("/api", articleRouter);

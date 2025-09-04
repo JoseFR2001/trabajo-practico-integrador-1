@@ -11,8 +11,7 @@ import {
 
 import {
   createArticleValidation,
-  deleteArticleValidation,
-  getArticleByPkValidation,
+  idArticleValidation,
   updateArticleValidation,
 } from "../middlewares/validations/article.validation.js";
 
@@ -37,7 +36,7 @@ articleRouter.get("/articles", authMiddleware, getAllArticles);
 articleRouter.get(
   "/articles/:id",
   authMiddleware,
-  getArticleByPkValidation,
+  idArticleValidation,
   applyValidations,
   getByPkArticle
 );
@@ -47,6 +46,8 @@ articleRouter.get("/articles/user", authMiddleware, getArticleUserLogin);
 articleRouter.get(
   "/articles/user/:id",
   authMiddleware,
+  idArticleValidation,
+  applyValidations,
   getArticleUserLoginById
 );
 
@@ -64,7 +65,7 @@ articleRouter.delete(
   "/articles/:id",
   authMiddleware,
   ownerMiddleware,
-  deleteArticleValidation,
+  idArticleValidation,
   applyValidations,
   deleteArticle
 );

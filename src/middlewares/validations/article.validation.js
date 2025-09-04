@@ -26,10 +26,7 @@ export const createArticleValidation = [
     .withMessage("El excerpt no puede contener mas de 500 caracteres")
     .escape(),
   body("status")
-    .customSanitizer(async (value) => {
-      if (!value || value.trim() === "") return "published";
-      return value;
-    })
+    .optional()
     .isIn(["published", "archived"])
     .withMessage("El status solo puede ser published o archived "),
   body("user_id")
@@ -49,7 +46,7 @@ export const createArticleValidation = [
     }),
 ];
 
-export const getArticleByPkValidation = [
+export const idArticleValidation = [
   param("id")
     .isInt()
     .withMessage("El user_id debe ser un número entero")
@@ -103,10 +100,6 @@ export const updateArticleValidation = [
     .escape(),
   body("status")
     .optional()
-    .customSanitizer(async (value) => {
-      if (!value || value.trim() === "") return "published";
-      return value;
-    })
     .isIn(["published", "archived"])
     .withMessage("El status solo puede ser published o archived "),
   body("user_id")
@@ -122,21 +115,6 @@ export const updateArticleValidation = [
     .custom(async (user_id) => {
       const user = await UserModel.findByPk(user_id);
       if (!user) throw new Error("El usuario no existe");
-      return true;
-    }),
-];
-
-export const deleteArticleValidation = [
-  param("id")
-    .isInt()
-    .withMessage("El user_id debe ser un número entero")
-    .custom(async (id) => {
-      if (Number(id) < 1) throw new Error("El id debe ser positivo");
-      return true;
-    })
-    .custom(async (id) => {
-      const article = await ArticleModel.findByPk(id);
-      if (!article) throw new Error("El Article no existe");
       return true;
     }),
 ];

@@ -2,7 +2,7 @@ import { body, param } from "express-validator";
 import UserModel from "../../models/user.model.js";
 import { Op } from "sequelize";
 
-export const getUserByPkValidation = [
+export const idParamsUserValidation = [
   param("id")
     .isInt()
     .withMessage("El id debe ser un número entero")
@@ -50,8 +50,7 @@ export const updateUserValidation = [
         throw new Error("El username ya existe");
       }
       return true;
-    })
-    .escape(),
+    }),
   body("email")
     .optional()
     .trim()
@@ -87,25 +86,6 @@ export const updateUserValidation = [
     ),
   body("role")
     .optional()
-    .customSanitizer((value) => {
-      if (!value || value.trim() === "") return "user";
-      return value;
-    })
     .isIn(["user", "admin"])
     .withMessage("El campo role sólo puede ser 'user' o 'admin'"),
-];
-
-export const deleteUserValidation = [
-  param("id")
-    .isInt()
-    .withMessage("El id debe ser un número entero")
-    .custom(async (id) => {
-      if (Number(id) < 1) throw new Error("El id debe ser positivo");
-      return true;
-    })
-    .custom(async (id) => {
-      const user = await UserModel.findByPk(id);
-      if (!user) throw new Error("El ususario no existe");
-      return true;
-    }),
 ];

@@ -18,7 +18,7 @@ export const createTagValidation = [
     }),
 ];
 
-export const getTagByPkValidation = [
+export const idParamsTagValidation = [
   param("id")
     .isInt()
     .withMessage("El id debe ser un número entero")
@@ -58,21 +58,6 @@ export const updateTagValidation = [
         where: { name: nameMinuscula },
       });
       if (nameExiste) throw new Error("El name ya existe");
-      return true;
-    }),
-];
-
-export const deleteTagValidation = [
-  param("id")
-    .isInt()
-    .withMessage("El id debe ser un número entero")
-    .custom(async (id) => {
-      if (Number(id) < 1) throw new Error("El id debe ser positivo");
-      return true;
-    })
-    .custom(async (id) => {
-      const user = await TagModel.findByPk(id);
-      if (!user) throw new Error("El Tag no existe");
       return true;
     }),
 ];

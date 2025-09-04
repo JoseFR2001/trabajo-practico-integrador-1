@@ -21,9 +21,7 @@ export const createRegisterValidation = [
         throw new Error("El usurname ya existe");
       }
       return true;
-    })
-    .matches(/^\S*$/)
-    .escape(),
+    }),
 
   body("email")
     .trim()
@@ -60,12 +58,7 @@ export const createRegisterValidation = [
 
   body("role")
     .optional()
-    .customSanitizer((value) => {
-      //Uso customSanitizer para poder modificar el valor, con custom solo puedo verificar si se cumple la condición
-      if (!value || value.trim() === "") return "user";
-      return value;
-    })
-    .isIn(["user", "admin"]) //solo acepta los valores dentro de la array
+    .isIn(["user", "admin"])
     .withMessage("El campo role sólo puede ser 'user' o 'admin'"),
 
   body("first_name")
@@ -151,19 +144,5 @@ export const updateProfileValidation = [
     .withMessage("La fecha de nacimiento no puede estar vacía")
     .isISO8601()
     .withMessage("El birth_date debe estar en formato YYYY-MM-DD"),
-  body("user_id")
-    .optional()
-    .notEmpty()
-    .withMessage("El user_id es obligatorio")
-    .isInt()
-    .withMessage("El id debe ser un número entero")
-    .custom(async (user_id) => {
-      if (Number(user_id) < 1) throw new Error("El user_id debe ser positivo");
-      return true;
-    })
-    .custom(async (user_id) => {
-      const user = await UserModel.findByPk(user_id);
-      if (!user) throw new Error("El usuario no existe");
-      return true;
-    }),
+  body("user_id").optional(),
 ];

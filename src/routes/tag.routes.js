@@ -9,8 +9,7 @@ import {
 
 import {
   createTagValidation,
-  deleteTagValidation,
-  getTagByPkValidation,
+  idParamsTagValidation,
   updateTagValidation,
 } from "../middlewares/validations/tag.validation.js";
 
@@ -36,7 +35,7 @@ tagRouter.get(
   "/tags/:id",
   authMiddleware,
   adminMiddleware,
-  getTagByPkValidation,
+  idParamsTagValidation,
   applyValidations,
   getByPkTag
 );
@@ -55,7 +54,7 @@ tagRouter.delete(
   "/tags/:id",
   authMiddleware,
   adminMiddleware,
-  deleteTagValidation,
+  idParamsTagValidation,
   applyValidations,
   deleteTag
 );

@@ -6,8 +6,7 @@ import {
   updateUser,
 } from "../controllers/user.controller.js";
 import {
-  deleteUserValidation,
-  getUserByPkValidation,
+  idParamsUserValidation,
   updateUserValidation,
 } from "../middlewares/validations/user.validation.js";
 import applyValidations from "../middlewares/validator.js";
@@ -23,7 +22,7 @@ userRouter.get(
   "/users/:id",
   authMiddleware,
   adminMiddleware,
-  getUserByPkValidation,
+  idParamsUserValidation,
   applyValidations,
   getByPkUser
 );
@@ -41,7 +40,7 @@ userRouter.delete(
   "/users/:id",
   authMiddleware,
   adminMiddleware,
-  deleteUserValidation,
+  idParamsUserValidation,
   applyValidations,
   deleteUser
 );

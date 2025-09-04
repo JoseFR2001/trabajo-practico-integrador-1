@@ -36,39 +36,45 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { username, password } = req.body;
-  // Buscar usuario en base de datos
-  const user = await UserModel.findOne({
-    where: { username },
-    include: {
-      model: ProfileModel,
-      attributes: ["first_name", "last_name"],
-      as: "profile",
-    },
-  });
-  if (!user) {
-    return res.status(401).json({ message: "Credenciales inválidas" });
-  }
+  try {
+    const { username, password } = req.body;
+    // Buscar usuario en base de datos
+    const user = await UserModel.findOne({
+      where: { username },
+      include: {
+        model: ProfileModel,
+        attributes: ["first_name", "last_name"],
+        as: "profile",
+      },
+    });
+    if (!user) {
+      return res.status(401).json({ message: "Credenciales inválidas" });
+    }
 
-  // 2. Comparar contraseña ingresada con hash almacenado
-  const validPassword = await comparePassword(password, user.password);
-  if (!validPassword) {
-    return res.status(401).json({ message: "password inválidas" });
-  }
+    // 2. Comparar contraseña ingresada con hash almacenado
+    const validPassword = await comparePassword(password, user.password);
+    if (!validPassword) {
+      return res.status(401).json({ message: "password inválidas" });
+    }
 
-  // Generar JWT
-  const token = generateToken({
-    id: user.id,
-    role: user.role,
-    first_name: user.profile.first_name,
-    last_name: user.profile.last_name,
-  });
-  // Enviar token como cookie
-  res.cookie("token", token, {
-    httpOnly: true, // No accesible desde JavaScript
-    maxAge: 1000 * 60 * 60, // 1 hora
-  });
-  return res.json({ message: "Login exitoso" });
+    // Generar JWT
+    const token = generateToken({
+      id: user.id,
+      role: user.role,
+      first_name: user.profile.first_name,
+      last_name: user.profile.last_name,
+    });
+    // Enviar token como cookie
+    res.cookie("token", token, {
+      httpOnly: true, // No accesible desde JavaScript
+      maxAge: 1000 * 60 * 60, // 1 hora
+    });
+    return res.json({ message: "Login exitoso" });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Error interno del servidor",
+    });
+  }
 };
 
 export const logout = (req, res) => {
