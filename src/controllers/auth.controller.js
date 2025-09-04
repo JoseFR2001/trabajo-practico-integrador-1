@@ -1,4 +1,3 @@
-// import { matchedData } from "express-validator";
 import { generateToken } from "../helpers/jwt.helper.js";
 import ProfileModel from "../models/profile.model.js";
 import UserModel from "../models/user.model.js";
@@ -6,15 +5,8 @@ import { comparePassword, hashPassword } from "../helpers/bcrypt.helper.js";
 
 export const register = async (req, res) => {
   try {
-    // const data = matchedData(req, { locations: ["body"] });
-    // if (Object.keys(data).length === 0) {
-    //   return res
-    //     .status(404)
-    //     .json({ message: "La data tiene que ser correcta" });
-    // }
-
     const data = req.data;
-    console.log(`data: ${data}`);
+
     const hashedPassword = await hashPassword(data.password);
 
     const user = await UserModel.create({
@@ -103,13 +95,6 @@ export const getProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    // const data = matchedData(req, { locations: ["body"] });
-    // if (Object.keys(data).length === 0) {
-    //   return res
-    //     .status(404)
-    //     .json({ message: "La data tiene que ser correcta" });
-    // }
-
     const data = req.data;
 
     const perfil = await ProfileModel.findByPk(req.user.id);

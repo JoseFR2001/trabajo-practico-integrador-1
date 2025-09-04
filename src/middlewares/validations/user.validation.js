@@ -1,5 +1,6 @@
 import { body, param } from "express-validator";
 import UserModel from "../../models/user.model.js";
+import { Op } from "sequelize";
 
 export const getUserByPkValidation = [
   param("id")
@@ -40,10 +41,10 @@ export const updateUserValidation = [
     )
     .isAlphanumeric()
     .withMessage("El username debe ser alfanumerico")
-    .custom(async (username) => {
+    .custom(async (username, { req }) => {
       const usernameMinuscula = username.toLowerCase();
       const user = await UserModel.findOne({
-        where: { username: usernameMinuscula },
+        where: { username: usernameMinuscula, id: { [Op.ne]: req.params.id } },
       });
       if (user) {
         throw new Error("El username ya existe");
@@ -60,10 +61,10 @@ export const updateUserValidation = [
     .withMessage("No tiene el formato ejemplo@gmail.com")
     .isLength({ max: 100 })
     .withMessage("El email debe tener al un maximos de 100 caracteres ")
-    .custom(async (email) => {
+    .custom(async (email, { req }) => {
       const emailMinuscula = email.toLowerCase();
       const emailExiste = await UserModel.findOne({
-        where: { email: emailMinuscula },
+        where: { email: emailMinuscula, id: { [Op.ne]: req.params.id } },
       });
       if (emailExiste) {
         throw new Error("El email ya existe");
