@@ -1,7 +1,7 @@
-import { body, param } from "express-validator";
+import { body } from "express-validator";
 import UserModel from "../../models/user.model.js";
 
-export const createUserValidation = [
+export const createRegisterValidation = [
   body("username")
     .trim()
     .notEmpty()
@@ -22,7 +22,9 @@ export const createUserValidation = [
       }
       return true;
     })
+    .matches(/^\S*$/)
     .escape(),
+
   body("email")
     .trim()
     .notEmpty()
@@ -32,9 +34,8 @@ export const createUserValidation = [
     .isLength({ max: 100 })
     .withMessage("El email debe tener al un maximos de 100 caracteres ")
     .custom(async (email) => {
-      const emailMinuscula = email.toLowerCase();
       const emailExiste = await UserModel.findOne({
-        where: { email: emailMinuscula },
+        where: { email },
       });
       if (emailExiste) {
         throw new Error("El email ya existe");
@@ -42,6 +43,7 @@ export const createUserValidation = [
       return true;
     })
     .escape(),
+
   body("password")
     .trim()
     .notEmpty()
@@ -53,7 +55,9 @@ export const createUserValidation = [
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/)
     .withMessage(
       "La contraseña debe tener al menos una minuscula, una mayuscula y un número"
-    ),
+    )
+    .matches(/^\S*$/),
+
   body("role")
     .optional()
     .customSanitizer((value) => {
@@ -63,9 +67,7 @@ export const createUserValidation = [
     })
     .isIn(["user", "admin"]) //solo acepta los valores dentro de la array
     .withMessage("El campo role sólo puede ser 'user' o 'admin'"),
-];
 
-export const createProfileValidation = [
   body("first_name")
     .trim()
     .notEmpty()
@@ -75,6 +77,7 @@ export const createProfileValidation = [
     .isLength({ min: 2, max: 50 })
     .withMessage("El nombre debe tener entre 2 y 50 caracteres")
     .escape(),
+
   body("last_name")
     .trim()
     .notEmpty()
@@ -84,24 +87,29 @@ export const createProfileValidation = [
     .isLength({ min: 2, max: 50 })
     .withMessage("El apellido debe tener entre 2 y 50 caracteres")
     .escape(),
+
   body("biography")
     .optional()
     .notEmpty()
     .withMessage("La biografía no puede estar vacía")
     .isLength({ max: 500 })
     .withMessage("La biografía tiene un máximo de 500 caracteres"),
+
   body("avatar_url")
     .optional()
     .notEmpty()
     .withMessage("El avatar_url no puede estar vacío")
     .isURL()
     .withMessage("El avatar_url no tiene el formato correcto"),
+
   body("birth_date")
     .optional()
     .notEmpty()
     .withMessage("La fecha de nacimiento no puede estar vacía")
     .isISO8601()
     .withMessage("El birth_date debe estar en formato YYYY-MM-DD"),
+
+  body("user_id").optional(),
 ];
 
 export const updateProfileValidation = [

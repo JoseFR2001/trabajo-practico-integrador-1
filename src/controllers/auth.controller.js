@@ -1,4 +1,4 @@
-import { matchedData } from "express-validator";
+// import { matchedData } from "express-validator";
 import { generateToken } from "../helpers/jwt.helper.js";
 import ProfileModel from "../models/profile.model.js";
 import UserModel from "../models/user.model.js";
@@ -6,16 +6,15 @@ import { comparePassword, hashPassword } from "../helpers/bcrypt.helper.js";
 
 export const register = async (req, res) => {
   try {
-    const data = matchedData(req, { locations: ["body"] });
+    // const data = matchedData(req, { locations: ["body"] });
+    // if (Object.keys(data).length === 0) {
+    //   return res
+    //     .status(404)
+    //     .json({ message: "La data tiene que ser correcta" });
+    // }
 
-    console.log(data);
-
-    if (Object.keys(data).length === 0) {
-      return res
-        .status(404)
-        .json({ message: "La data tiene que ser correcta" });
-    }
-
+    const data = req.data;
+    console.log(`data: ${data}`);
     const hashedPassword = await hashPassword(data.password);
 
     const user = await UserModel.create({
@@ -85,11 +84,15 @@ export const logout = (req, res) => {
   return res.json({ message: "Logout exitoso" });
 };
 
-//● GET /api/auth/profile: Obtener perfil del usuario autenticado. (usuario autenticado)
-
 export const getProfile = async (req, res) => {
   try {
-    const perfil = await ProfileModel.findByPk(req.user.id);
+    const perfil = await ProfileModel.findByPk(req.user.id, {
+      include: {
+        model: UserModel,
+        as: "user",
+        attributes: { exclude: ["password"] },
+      },
+    });
     if (!perfil)
       return res.status(404).json({ message: "El perfil no encontrado" });
     return res.status(200).json(perfil);
@@ -100,19 +103,27 @@ export const getProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const data = matchedData(req, { locations: ["body"] });
+    // const data = matchedData(req, { locations: ["body"] });
+    // if (Object.keys(data).length === 0) {
+    //   return res
+    //     .status(404)
+    //     .json({ message: "La data tiene que ser correcta" });
+    // }
 
-    if (Object.keys(data).length === 0) {
-      return res
-        .status(404)
-        .json({ message: "La data tiene que ser correcta" });
-    }
+    const data = req.data;
 
     const perfil = await ProfileModel.findByPk(req.user.id);
     if (!perfil)
       return res.status(404).json({ message: "El perfil no encontrado" });
 
-    await perfil.update(data);
+    await perfil.update({
+      first_name: data.first_name,
+      last_name: data.last_name,
+      biography: data.biography,
+      avatar_url: data.avatar_url,
+      birth_date: data.birth_date,
+      user_id: req.user_id,
+    });
     return res.json({
       message: "Perfil actualizado correctamente",
       perfil,

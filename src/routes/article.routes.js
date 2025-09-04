@@ -3,7 +3,8 @@ import {
   createArticle,
   deleteArticle,
   getAllArticles,
-  getAllUserLogeado,
+  getArticleUserLogin,
+  getArticleUserLoginById,
   getByPkArticle,
   updateArticle,
 } from "../controllers/article.controller.js";
@@ -18,6 +19,7 @@ import {
 import applyValidations from "../middlewares/validator.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { ownerMiddleware } from "../middlewares/owner.middleware.js";
+import { dataValidada } from "../middlewares/matched_data.middleware.js";
 
 const articleRouter = Router();
 
@@ -26,6 +28,7 @@ articleRouter.post(
   authMiddleware,
   createArticleValidation,
   applyValidations,
+  dataValidada,
   createArticle
 );
 
@@ -39,9 +42,13 @@ articleRouter.get(
   getByPkArticle
 );
 
-articleRouter.get("/articles/user", authMiddleware, getAllUserLogeado);
+articleRouter.get("/articles/user", authMiddleware, getArticleUserLogin);
 
-articleRouter.get("/articles/user/:id", authMiddleware, getByPkArticle);
+articleRouter.get(
+  "/articles/user/:id",
+  authMiddleware,
+  getArticleUserLoginById
+);
 
 articleRouter.put(
   "/articles/:id",
@@ -49,6 +56,7 @@ articleRouter.put(
   ownerMiddleware,
   updateArticleValidation,
   applyValidations,
+  dataValidada,
   updateArticle
 );
 

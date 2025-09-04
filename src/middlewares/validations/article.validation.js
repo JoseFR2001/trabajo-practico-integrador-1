@@ -33,6 +33,7 @@ export const createArticleValidation = [
     .isIn(["published", "archived"])
     .withMessage("El status solo puede ser published o archived "),
   body("user_id")
+    .optional()
     .notEmpty()
     .withMessage("El user_id es obligatorio")
     .isInt()
@@ -66,7 +67,7 @@ export const getArticleByPkValidation = [
 export const updateArticleValidation = [
   param("id")
     .isInt()
-    .withMessage("El user_id debe ser un número entero")
+    .withMessage("El id debe ser un número entero")
     .custom(async (id) => {
       if (Number(id) < 1) throw new Error("El id debe ser positivo");
       return true;

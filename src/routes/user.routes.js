@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  // createUser,
   deleteUser,
   getAllUser,
   getByPkUser,
@@ -14,8 +13,10 @@ import {
 import applyValidations from "../middlewares/validator.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { adminMiddleware } from "../middlewares/admin.middleware.js";
+import { dataValidada } from "../middlewares/matched_data.middleware.js";
 
 const userRouter = Router();
+
 userRouter.get("/users", authMiddleware, adminMiddleware, getAllUser);
 
 userRouter.get(
@@ -33,6 +34,7 @@ userRouter.put(
   adminMiddleware,
   updateUserValidation,
   applyValidations,
+  dataValidada,
   updateUser
 );
 userRouter.delete(

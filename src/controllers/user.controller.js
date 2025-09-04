@@ -1,9 +1,14 @@
-import { matchedData } from "express-validator";
+// import { matchedData } from "express-validator";
+import ArticleModel from "../models/article.model.js";
+import ProfileModel from "../models/profile.model.js";
 import UserModel from "../models/user.model.js";
 
 export const getAllUser = async (req, res) => {
   try {
-    const users = await UserModel.findAll();
+    const users = await UserModel.findAll({
+      attributes: { exclude: ["password"] },
+      include: { model: ProfileModel, as: "profile" },
+    });
     if (users.length === 0)
       return res.status(404).json({ message: "No existen usuarios" });
     return res.status(200).json(users);
@@ -15,7 +20,13 @@ export const getAllUser = async (req, res) => {
 export const getByPkUser = async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await UserModel.findByPk(id);
+    const user = await UserModel.findByPk(id, {
+      attributes: { exclude: ["password"] },
+      include: [
+        { model: ProfileModel, as: "profile" },
+        { model: ArticleModel, as: "articles" },
+      ],
+    });
     if (!user) return res.status(404).json({ message: "El usuario no existe" });
     return res.status(200).json(user);
   } catch (error) {
@@ -26,13 +37,15 @@ export const getByPkUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   const { id } = req.params;
   try {
-    const data = matchedData(req, { locations: ["body"] });
+    // const data = matchedData(req, { locations: ["body"] });
 
-    if (Object.keys(data).length === 0) {
-      return res
-        .status(404)
-        .json({ message: "La data tiene que ser correcta" });
-    }
+    // if (Object.keys(data).length === 0) {
+    //   return res
+    //     .status(404)
+    //     .json({ message: "La data tiene que ser correcta" });
+    // }
+
+    const data = req.data;
 
     const user = await UserModel.findByPk(id);
     if (!user) return res.status(404).json({ message: "El usuario no existe" });

@@ -1,3 +1,5 @@
+// import { matchedData } from "express-validator";
+import ArticleModel from "../models/article.model.js";
 import TagModel from "../models/tag.model.js";
 
 export const createTag = async (req, res) => {
@@ -23,7 +25,13 @@ export const getAllTags = async (req, res) => {
 export const getByPkTag = async (req, res) => {
   const { id } = req.params;
   try {
-    const tag = await TagModel.findByPk(id);
+    const tag = await TagModel.findByPk(id, {
+      include: {
+        model: ArticleModel,
+        as: "articles",
+        through: { attributes: [] },
+      },
+    });
     if (!tag) return res.status(404).json({ message: "La etiqueta no existe" });
     return res.status(200).json(tag);
   } catch (error) {
@@ -34,13 +42,15 @@ export const getByPkTag = async (req, res) => {
 export const updateTag = async (req, res) => {
   const { id } = req.params;
   try {
-    const data = matchedData(req, { locations: ["body"] });
+    // const data = matchedData(req, { locations: ["body"] });
 
-    if (Object.keys(data).length === 0) {
-      return res
-        .status(404)
-        .json({ message: "La data tiene que ser correcta" });
-    }
+    // if (Object.keys(data).length === 0) {
+    //   return res
+    //     .status(404)
+    //     .json({ message: "La data tiene que ser correcta" });
+    // }
+
+    const data = req.data;
 
     const tag = await TagModel.findByPk(id);
     if (!tag) return res.status(404).json({ message: "El Tag no existe" });

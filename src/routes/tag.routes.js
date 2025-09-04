@@ -17,6 +17,7 @@ import {
 import applyValidations from "../middlewares/validator.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { adminMiddleware } from "../middlewares/admin.middleware.js";
+import { dataValidada } from "../middlewares/matched_data.middleware.js";
 
 const tagRouter = Router();
 
@@ -46,6 +47,7 @@ tagRouter.put(
   adminMiddleware,
   updateTagValidation,
   applyValidations,
+  dataValidada,
   updateTag
 );
 

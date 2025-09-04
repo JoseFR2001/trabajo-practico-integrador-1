@@ -7,21 +7,21 @@ import {
   updateProfile,
 } from "../controllers/auth.controller.js";
 import {
-  createProfileValidation,
-  createUserValidation,
+  createRegisterValidation,
   updateProfileValidation,
 } from "../middlewares/validations/auth.validation.js";
 
 import applyValidations from "../middlewares/validator.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { dataValidada } from "../middlewares/matched_data.middleware.js";
 
 export const authRoutes = Router();
 
 authRoutes.post(
   "/auth/register",
-  createUserValidation,
-  createProfileValidation,
+  createRegisterValidation,
   applyValidations,
+  dataValidada,
   register
 );
 
@@ -36,5 +36,6 @@ authRoutes.put(
   authMiddleware,
   updateProfileValidation,
   applyValidations,
+  dataValidada,
   updateProfile
 );
