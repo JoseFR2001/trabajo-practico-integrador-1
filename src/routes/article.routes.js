@@ -33,14 +33,6 @@ articleRouter.post(
 
 articleRouter.get("/articles", authMiddleware, getAllArticles);
 
-articleRouter.get(
-  "/articles/:id",
-  authMiddleware,
-  idArticleValidation,
-  applyValidations,
-  getByPkArticle
-);
-
 articleRouter.get("/articles/user", authMiddleware, getArticleUserLogin);
 
 articleRouter.get(
@@ -49,6 +41,13 @@ articleRouter.get(
   idArticleValidation,
   applyValidations,
   getArticleUserLoginById
+);
+articleRouter.get(
+  "/articles/:id",
+  authMiddleware,
+  idArticleValidation,
+  applyValidations,
+  getByPkArticle
 );
 
 articleRouter.put(

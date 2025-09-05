@@ -19,7 +19,7 @@ export const authorMiddleware = async (req, res, next) => {
       where: { user_id: req.user.id, id: req.body.article_id },
     });
 
-    if (article)
+    if (!article)
       return res.status(403).json({
         message: "No eres el autor",
       });

@@ -49,13 +49,15 @@ export const getByPkArticle = async (req, res) => {
 
 export const getArticleUserLogin = async (req, res) => {
   try {
-    const articleUserLogin = await UserModel.findByPk(req.user.id, {
-      attributes: { exclude: ["password"] },
-      include: {
-        model: ArticleModel,
-        as: "articles",
-      },
+    const articleUserLogin = await ArticleModel.findAll({
+      where: { user_id: req.user.id },
+      attributes: { exclude: ["user_id"] },
     });
+
+    if (articleUserLogin.length === 0)
+      return res
+        .status(404)
+        .json({ message: "El usuario no tiene articulos publicados" });
 
     return res.status(200).json(articleUserLogin);
   } catch (error) {
