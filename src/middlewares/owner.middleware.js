@@ -13,3 +13,18 @@ export const ownerMiddleware = async (req, res, next) => {
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };
+export const authorMiddleware = async (req, res, next) => {
+  try {
+    const article = await ArticleModel.findOne({
+      where: { user_id: req.user.id, id: req.body.article_id },
+    });
+
+    if (article)
+      return res.status(403).json({
+        message: "No eres el autor",
+      });
+    next();
+  } catch (error) {
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+};

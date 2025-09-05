@@ -29,21 +29,7 @@ export const createArticleValidation = [
     .optional()
     .isIn(["published", "archived"])
     .withMessage("El status solo puede ser published o archived "),
-  body("user_id")
-    .optional()
-    .notEmpty()
-    .withMessage("El user_id es obligatorio")
-    .isInt()
-    .withMessage("El user_id debe ser un número entero")
-    .custom(async (user_id) => {
-      if (Number(user_id) < 1) throw new Error("El user_id debe ser positivo");
-      return true;
-    })
-    .custom(async (user_id) => {
-      const user = await UserModel.findByPk(user_id);
-      if (!user) throw new Error("El usuario no existe");
-      return true;
-    }),
+  body("user_id").optional(),
 ];
 
 export const idArticleValidation = [
@@ -102,19 +88,5 @@ export const updateArticleValidation = [
     .optional()
     .isIn(["published", "archived"])
     .withMessage("El status solo puede ser published o archived "),
-  body("user_id")
-    .optional()
-    .notEmpty()
-    .withMessage("El user_id es obligatorio")
-    .isInt()
-    .withMessage("El user_id debe ser un número entero")
-    .custom(async (user_id) => {
-      if (Number(user_id) < 1) throw new Error("El user_id debe ser positivo");
-      return true;
-    })
-    .custom(async (user_id) => {
-      const user = await UserModel.findByPk(user_id);
-      if (!user) throw new Error("El usuario no existe");
-      return true;
-    }),
+  body("user_id").optional(),
 ];

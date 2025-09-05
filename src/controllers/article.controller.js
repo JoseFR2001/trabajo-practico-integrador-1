@@ -96,7 +96,7 @@ export const updateArticle = async (req, res) => {
       content: data.content,
       excerpt: data.excerpt,
       status: data.status,
-      user_id: req.user.id,
+      user_id: article.user_id,
     });
 
     return res.status(200).json({ message: "Articulo actualizado", article });

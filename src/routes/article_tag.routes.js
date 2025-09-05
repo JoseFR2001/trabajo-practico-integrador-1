@@ -11,14 +11,14 @@ import {
 
 import applyValidations from "../middlewares/validator.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
-import { ownerMiddleware } from "../middlewares/owner.middleware.js";
+import { authorMiddleware } from "../middlewares/owner.middleware.js";
 
 const articleTagRouter = Router();
 
 articleTagRouter.post(
   "/articles-tags",
   authMiddleware,
-  ownerMiddleware,
+  authorMiddleware,
   createArticleTagValidation,
   applyValidations,
   createArticleTag
@@ -27,7 +27,7 @@ articleTagRouter.post(
 articleTagRouter.delete(
   "/articles-tags/:articleTagId",
   authMiddleware,
-  ownerMiddleware,
+  authorMiddleware,
   deleteArticleTagValidation,
   applyValidations,
   deleteArticleTag
